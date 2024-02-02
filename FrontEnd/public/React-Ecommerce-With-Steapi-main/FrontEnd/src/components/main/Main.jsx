@@ -1,6 +1,5 @@
 import {
   Box,
-  CircularProgress,
   Container,
   Dialog,
   IconButton,
@@ -23,13 +22,10 @@ import Button from "@mui/material/Button";
 import ShoppingCartCheckoutOutlinedIcon from "@mui/icons-material/ShoppingCartCheckoutOutlined";
 import { AddShoppingCartOutlined, Close } from "@mui/icons-material";
 import { useGetproductByNameQuery } from "../../redux/Product";
-import { AnimatePresence, motion } from "framer-motion";
 
 const Main = () => {
   const handleAlignment = (event, newValue) => {
-    if (newValue !== null) {
-      setmyData(newValue);
-    }
+    setmyData(newValue);
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -58,32 +54,19 @@ const Main = () => {
 
   const { data, error, isLoading } = useGetproductByNameQuery(myData);
 
-  // eslint-disable-next-line no-unused-vars
-  const [clickedProdect, setClickedProdect] = useState({});
-
   if (data) {
     console.log(data.data);
   }
 
   if (isLoading) {
-    return (
-      <Box sx={{ py: 11, textAlign: "center" }}>
-        <CircularProgress />
-      </Box>
-    );
+    return <Typography variant="h5">LODING.....</Typography>;
   }
 
   if (error) {
-    return (
-      <Container sx={{ py: 11, textAlign: "center" }}>
-        (<Typography variant="h5">{error.error}</Typography>), (
-        <Typography variant="h5">PLease Try Again Leater</Typography>)
-      </Container>
-    );
+    return <Typography variant="h5">{error.massage}</Typography>;
   }
 
   //end api handel
-
   if (data) {
     return (
       <Container sx={{ py: 8 }}>
@@ -151,78 +134,67 @@ const Main = () => {
           justifyContent={"space-between"}
           flexWrap={"wrap"}
         >
-          <AnimatePresence>
-            {data.data.map((item) => {
-              return (
-                <Card
-                  component={motion.section}
-                  layout
-                  initial={{ transform: "scale(0)" }}
-                  animate={{ transform: "scale(1)" }}
-                  transition={{ duration: 1.6, type: "spring", stiffness: 200 }}
-                  key={item.id}
-                  sx={{
-                    maxWidth: 300,
-                    mt: 6,
-                    ":hover .MuiCardMedia-root ": {
-                      scale: "1.1",
-                      transition: "0.35s",
-                      rotate: "5deg",
-                    },
-                  }}
-                >
-                  <CardMedia
-                    sx={{ height: 240 }}
-                    image={`${item.attributes.image.data[0].attributes.url}`}
-                    alt="Paella dish"
-                  />
+          {data.data.map((item) => {
+            return (
+              <Card
+                key={item}
+                sx={{
+                  maxWidth: 300,
+                  mt: 6,
+                  ":hover .MuiCardMedia-root ": {
+                    scale: "1.1",
+                    transition: "0.35s",
+                    rotate: "5deg",
+                  },
+                }}
+              >
+                <CardMedia
+                  sx={{ height: 240 }}
+                  image={`${item.attributes.image.data[0].attributes.url}`}
+                  alt="Paella dish"
+                />
 
-                  <CardContent>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"space-between"}
-                      alignItems={"center"}
-                    >
-                      <Typography gutterBottom variant="h6" component={"div"}>
-                        {item.attributes.title}
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        ${item.attributes.price}
-                      </Typography>
-                    </Stack>
-
-                    <Typography variant="body2" color={"text.secondary"}>
-                      {item.attributes.description}
+                <CardContent>
+                  <Stack
+                    direction={"row"}
+                    justifyContent={"space-between"}
+                    alignItems={"center"}
+                  >
+                    <Typography gutterBottom variant="h6" component={"div"}>
+                      {item.attributes.title}
                     </Typography>
-                  </CardContent>
+                    <Typography variant="subtitle1">
+                      ${item.attributes.price}
+                    </Typography>
+                  </Stack>
 
-                  <CardActions sx={{ justifyContent: "space-between" }}>
-                    <Button
-                      sx={{ textTransform: "capitalize" }}
-                      size="large"
-                      onClick={() => {
-                        handleClickOpen();
-                        setClickedProdect(item);
-                        console.log(item);
-                      }}
-                    >
-                      <ShoppingCartCheckoutOutlinedIcon
-                        sx={{ mr: 1 }}
-                        fontSize="small"
-                      />
-                      Add To Cart
-                    </Button>
-                    <Rating
-                      precision={0.5}
-                      name="read-only"
-                      value={item.attributes.rating}
-                      readOnly
+                  <Typography variant="body2" color={"text.secondary"}>
+                    {item.attributes.description}
+                  </Typography>
+                </CardContent>
+
+                <CardActions sx={{ justifyContent: "space-between" }}>
+                  <Button
+                    sx={{ textTransform: "capitalize" }}
+                    size="large"
+                    onClick={handleClickOpen}
+                  >
+                    <ShoppingCartCheckoutOutlinedIcon
+                      sx={{ mr: 1 }}
+                      fontSize="small"
                     />
-                  </CardActions>
-                </Card>
-              );
-            })}
-          </AnimatePresence>
+                    Add To Cart
+                  </Button>
+                  <Rating
+                    precision={0.5}
+                    name="read-only"
+                    value={item.attributes.rating}
+                    readOnly
+                  />
+                </CardActions>
+              </Card>
+            );
+          })}
         </Stack>
 
         {/* Dialog for open card and choose color */}
@@ -261,7 +233,7 @@ const Main = () => {
             }}
           >
             <Box display={"flex"}>
-              <img width={350} src=".\img\22.jpg" alt="img" />
+              <img width={350} src="src\img\22.jpg" alt="img" />
             </Box>
 
             <Box sx={{ textAlign: { xs: "center", sm: "left" } }}>
@@ -286,7 +258,7 @@ const Main = () => {
                 gap={1}
                 my={2}
               >
-                {["./img/22.jpg", "./img/11.jpg"].map((item) => {
+                {["src/img/22.jpg", "src/img/11.jpg"].map((item) => {
                   return (
                     <img
                       style={{ borderRadius: 3 }}
